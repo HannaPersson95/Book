@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  api:
+    container_name: book-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+    - 8888:8080
+    networks:
+    - book-nett
+    depends_on:
+     - db
+    environment:
+     - ConnectionStrings__DefaultConnection=Server=book-db; Database=book_db;User ID=book-api-user; Password=5ecret-b00k;
+
+
+  db: 
+    container_name: book-db
+    build:
+      dockerfile: Dockerfile
+      context: .\Docker\MySQL
+    volumes:
+      - book-vol:/var/lib/mysql
+    ports:
+    - 6033:3306
+    networks:
+    - book-nett
+
+  server:
+    container_name: book-server
+    build:
+       dockerfile: Dockerfile
+       context: Docker\Nginx
+    ports:
+     - 80:81
+    networks:
+    - book-nett
+    depends_on:
+    - api
+
+
+
+volumes:
+  book-vol:
+
+networks:
+  book-nett:
+    driver: bridge
+    

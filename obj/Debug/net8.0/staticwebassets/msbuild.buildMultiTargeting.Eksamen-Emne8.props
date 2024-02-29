@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Eksamen-Emne8.props" />
+</Project>
